@@ -5,7 +5,7 @@
 #include "utils/number_generator.hpp"
 #include "utils/math.hpp"
 
-
+//creates random color
 static sf::Color getRainbow(float t)
 {
     const float r = sin(t);
@@ -25,7 +25,7 @@ int32_t main(int32_t, char*[])
 
     sf::ContextSettings settings;
     settings.antialiasingLevel = 1;
-    sf::RenderWindow window(sf::VideoMode(window_width, window_height), "Verlet", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(window_width, window_height), "PhysicsDemo", sf::Style::Default, settings);
     const uint32_t frame_rate = 60;
     window.setFramerateLimit(frame_rate);
 
@@ -45,8 +45,8 @@ int32_t main(int32_t, char*[])
     const float        object_max_radius     = 20.0f;
     const uint32_t     max_objects_count     = 1000;
     const float        max_angle             = 1.0f;
-
     sf::Clock clock;
+
     // Main loop
     while (window.isOpen()) {
         sf::Event event{};
@@ -61,9 +61,10 @@ int32_t main(int32_t, char*[])
             auto&       object = solver.addObject(object_spawn_position, RNGf::getRange(object_min_radius, object_max_radius));
             const float t      = solver.getTime();
             const float angle  = max_angle * sin(t) + Math::PI * 0.5f;
-            solver.setObjectVelocity(object, object_spawn_speed * sf::Vector2f{cos(angle), sin(angle)});
+            solver.setObjectVelocity(object, object_spawn_speed * sf::Vector2f{static_cast<float>(std::cos(angle)), static_cast<float>(std::sin(angle))});
             object.color = getRainbow(t);
         }
+
 
         solver.update();
         window.clear(sf::Color::White);
